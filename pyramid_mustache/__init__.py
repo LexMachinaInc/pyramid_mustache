@@ -19,8 +19,8 @@ class LexRenderer(Renderer):
     """Deal with ES results of the form '["5925074"]' which from python ends up
        as %5Bu'5925074'%5D  """
     def str_coerce(self, val):
-        if isinstance(val, list):
-            return '_'.join(val)
+        if isinstance(val, list) and len(val) == 1:
+            return ''.join(val)
 
 def includeme(config):
     config.add_renderer('.mustache', MustacheRendererFactory)

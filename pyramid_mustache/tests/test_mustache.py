@@ -30,3 +30,11 @@ class TestMustache(TestCase):
         output = renderer.render(our_template, {'Patent':{'title':'foo-bar','link_number':[u'1234']}})
         print 'output %s', output
         self.assertNotIn('[u', output)
+
+    def test_mustache_lex_string(self):
+        renderer = LexRenderer()
+        output = renderer.render(our_template, {'Patent':[{'title':['foo-bar','baz'],'link_number': u'1234'}, {'title':'Balloons','link_number': u'999999'}]})
+        print 'output %s', output
+        self.assertIn('1234', output)
+        self.assertNotIn('[u', output)
+
