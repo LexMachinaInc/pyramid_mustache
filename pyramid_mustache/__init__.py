@@ -25,7 +25,7 @@ class LexRenderer(Renderer):
             else:
                 raise ValueError("Lists like %s should iterated and not rendered at once", val)
         else:
-	    return str(val)
+	    return unicode(val)
 
 
 def includeme(config):
