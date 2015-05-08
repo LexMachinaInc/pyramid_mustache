@@ -21,6 +21,7 @@ our_other_template=u"""{{#Patent}}
          <a href="/patent/{{.}}">
            <span class="label label-patent-big">{{.}}</span>
          </a>
+         <textarea name="details" rows="{{numRows}}" class="form-control"></textarea>
          {{/link_number}}
          {{#title}}{{.}}{{/title}}
        </h4>
@@ -62,3 +63,11 @@ class TestMustache(TestCase):
         self.assertIn('5678', output)
         self.assertNotIn('[u',output)
     
+    def test_mustache_lex_integer(self):
+        renderer = LexRenderer()
+        output= renderer.render(our_other_template, {'Patent':{'title':'foo-bar','link_number':[1234], 'numRows': 10}})
+        print 'output %s', output
+        self.assertIn('1234', output)
+        self.assertIn('10', output)
+        self.assertNotIn('[u',output)
+

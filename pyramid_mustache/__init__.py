@@ -23,7 +23,9 @@ class LexRenderer(Renderer):
             if len(val) == 1:
                 return ''.join(val)
             else:
-                raise ValueError("Lists should iterated and not rendered at once")
+                raise ValueError("Lists like %s should iterated and not rendered at once", val)
+        else:
+	    return str(val)
 
 
 def includeme(config):
