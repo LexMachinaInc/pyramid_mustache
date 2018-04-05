@@ -1,8 +1,8 @@
-from pystache.context   import ContextStack
-from pystache           import Renderer
-from pyramid.path       import AssetResolver
-from pyramid.i18n       import get_localizer
-from pyramid.i18n       import TranslationStringFactory
+from pystache.context import ContextStack
+from pystache import Renderer
+from pyramid.path import AssetResolver
+from pyramid.i18n import get_localizer
+from pyramid.i18n import TranslationStringFactory
 
 import re
 import os.path
@@ -18,20 +18,24 @@ from pyramid.settings import (
 class LexRenderer(Renderer):
     """Deal with ES results of the form '["5925074"]' which from python ends up
        as %5Bu'5925074'%5D  """
+
     def str_coerce(self, val):
         if isinstance(val, list):
             if len(val) == 1:
                 return ''.join(val)
             else:
-                raise ValueError("Lists like %s should iterated and not rendered at once", val)
+                raise ValueError(
+                    "Lists like %s should iterated and not rendered at once", val)
         else:
-	    return unicode(val)
+            return unicode(val)
 
 
 def includeme(config):
     config.add_renderer('.mustache', MustacheRendererFactory)
 
+
 _ = TranslationStringFactory('pyramid_mustache')
+
 
 class MustacheContextStack(ContextStack):
     """ Context stack that makes renderering match with mustache.js """
@@ -44,10 +48,12 @@ class MustacheContextStack(ContextStack):
         else:
             return value
 
+
 class MustacheRendererFactory(object):
     def __init__(self, info):
         self.info = info
-        self.mustache_directories = self.info.settings.get('mustache.directories')
+        self.mustache_directories = self.info.settings.get(
+            'mustache.directories')
         if not is_nonstr_iter(self.mustache_directories):
             self.mustache_directories = aslist(
                 self.mustache_directories or '',
@@ -113,7 +119,8 @@ class MustacheRendererFactory(object):
         template_stream = template_fh.read()
         template_fh.close()
 
-        mustache_directories = self.mustache_directories or [os.path.dirname(full_path)]
+        mustache_directories = self.mustache_directories or [
+            os.path.dirname(full_path)]
         partials = PartialsLoader(mustache_directories, ar)
 
         renderer = LexRenderer(partials=partials, string_encoding='utf8')
@@ -130,6 +137,7 @@ class MustacheRendererFactory(object):
 
         return self.render_template(self.info.name)
 
+
 class PartialsLoader(object):
     def __init__(self, partials_roots, asset_resolver):
         self.partials_roots = partials_roots
@@ -141,7 +149,8 @@ class PartialsLoader(object):
             self.partials[key] = None
             partial_filename = key + '.mustache'
             for partials_root in self.partials_roots:
-                partials_root = self.asset_resolver.resolve(partials_root).abspath()
+                partials_root = self.asset_resolver.resolve(
+                    partials_root).abspath()
                 for dirpath, dirnames, filenames in os.walk(partials_root):
                     for filename in filenames:
                         if filename == partial_filename:
