@@ -1,3 +1,4 @@
+from builtins import str
 from pystache.context import ContextStack
 from pystache import Renderer
 from pyramid.path import AssetResolver
@@ -27,7 +28,7 @@ class LexRenderer(Renderer):
                 raise ValueError(
                     "Lists like %s should iterated and not rendered at once", val)
         else:
-            return unicode(val)
+            return str(val)
 
 
 def includeme(config):
